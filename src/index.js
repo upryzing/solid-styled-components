@@ -33,7 +33,7 @@ export function useTheme() {
   return useContext(ThemeContext);
 }
 
-function makeStyled(tag) {
+function makeStyled(tag, prefixClass) {
   let _ctx = this || {};
   return (...args) => {
     const Styled = props => {
@@ -48,7 +48,7 @@ function makeStyled(tag) {
             { target: _ctx.target, o: append, p: withTheme, g: _ctx.g },
             args
           );
-          return [pClass, className].filter(Boolean).join(" ");
+          return `${prefixClass} ${[pClass, className].filter(Boolean).join(" ")}`;
         }
       });
       const [local, newProps] = splitProps(clone, ["as", "theme"]);

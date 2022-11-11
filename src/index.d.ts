@@ -71,7 +71,8 @@ type TagFn<T> = <P>(
 type StylingFn<T> = StylesFn<T> & TagFn<T>;
 export interface Styled {
   <T extends keyof JSX.IntrinsicElements>(
-    element: T | Component<JSX.IntrinsicElements[T]>
+    element: T | Component<JSX.IntrinsicElements[T]>,
+    prefixClass?: string
   ): StylingFn<JSX.IntrinsicElements[T]>;
   <T>(component: Component<T>): StylingFn<T>;
 }
