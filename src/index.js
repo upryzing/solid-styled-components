@@ -48,7 +48,7 @@ function makeStyled(tag, prefixClass) {
             { target: _ctx.target, o: append, p: withTheme, g: _ctx.g },
             args
           );
-          return `${prefixClass} ${[pClass, className].filter(Boolean).join(" ")}`;
+          return [prefixClass, pClass, className].filter(Boolean).join(" ");
         }
       });
       const [local, newProps] = splitProps(clone, ["as", "theme"]);
