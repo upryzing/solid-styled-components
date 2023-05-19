@@ -20,6 +20,7 @@ export function setup(prefixer, shouldForwardProp = null) {
   gooberSetup(null, prefixer);
   getForwardProps = shouldForwardProp;
 }
+
 const ThemeContext = createContext();
 export function ThemeProvider(props) {
   return createComponent(ThemeContext.Provider, {
@@ -31,6 +32,19 @@ export function ThemeProvider(props) {
 }
 export function useTheme() {
   return useContext(ThemeContext);
+}
+
+const DirectiveContext = createContext();
+export function DirectiveProvider(props) {
+  return createComponent(DirectiveContext.Provider, {
+    value: props.directives,
+    get children() {
+      return props.children;
+    }
+  });
+}
+export function useDirectives() {
+  return useContext(DirectiveContext);
 }
 
 function makeStyled(tag, prefixClass) {
@@ -71,12 +85,26 @@ function makeStyled(tag, prefixClass) {
             ...others
           });
         } else {
+          const directives = Object.keys(htmlProps)
+            .filter(key => key.startsWith('use:'));
+
           if (_ctx.g == 1) {
             // When using Global Styles we don't want to hydrate the unused nodes
             el = document.createElement(createTag);
             spread(el, htmlProps);
           } else {
             el = Dynamic(mergeProps({ component: createTag }, htmlProps));
+          }
+          
+          if (directives.length) {
+            const directivesContext = useDirectives();
+
+            if (directivesContext) {
+              const element = typeof el === 'function' ? el() : el;
+              for (const directive of directives) {
+                directivesContext[directive](element, () => htmlProps[directive]);
+              }
+            }
           }
         }
       }

@@ -50,6 +50,12 @@ export declare function ThemeProvider<
     children?: any;
   }
 >(props: T): JSX.Element;
+export declare function DirectiveProvider<
+  T extends {
+    directives: Record<string, Function>;
+    children?: any;
+  }
+>(props: T): JSX.Element;
 export declare function useTheme(): DefaultTheme;
 export interface ThemeProp {
   theme?: DefaultTheme;
